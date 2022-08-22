@@ -1,0 +1,80 @@
+import {useBalanceContext} from '../hooks/useBalanceContext'
+import { useState } from 'react'
+
+const UserDash = () => {
+
+    const {balance, dispatch} = useBalanceContext()
+
+    const [deposit, setDeposit] = useState('')
+    const [widthdraw, setWidthdraw] = useState('')
+    const [transactions, setTransactions] = useState([`opening balance ${balance}`])
+
+  
+
+  const Deposit = () =>{
+    if(!deposit || deposit <= 0){
+        alert('cannot make a depsoit of no money')
+    }
+    if(deposit > 0){
+    dispatch({type:'INCREASE_BALANCE', payload: parseInt(deposit)})
+    alert(`you have deposited ${deposit}`)
+    console.log(transactions)
+    setTransactions(oldArray => [...oldArray, `deposited ${deposit} && balance : ${balance - deposit}`])
+    setDeposit('')
+    }
+
+  }
+
+  const Widthdraw = () =>{
+    if(!widthdraw || widthdraw <= 0){
+        alert('cannot make a widthrawal of no money')
+    }
+    if(widthdraw > balance){
+        alert('not enogh funds')
+    }
+    if(widthdraw > 0 && widthdraw <= balance){
+    dispatch({type:'DECREASE_BALANCE', payload: parseInt(widthdraw)})
+    alert(`you have widthrawn ${widthdraw}`)
+    setTransactions(oldArray => [...oldArray, `widthrawn ${widthdraw} && balance : ${balance - widthdraw}`])
+    console.log(transactions)
+    setWidthdraw('')
+    }
+  }
+
+    return ( 
+        <div className="userDash">
+            <div>
+            <h1>welcome to the user dashboard</h1>
+            <h1>{balance}</h1>
+            <div className="deposit">
+                <input type="number" 
+                placeholder='deposit amount'
+                value={deposit}
+                onChange={(e) => setDeposit(e.target.value)}
+                />
+                <button onClick={Deposit}>deposit</button>
+            </div>
+            <div className="widthdraw">
+                <input type="number" 
+                placeholder='widthdrawal amount'
+                value={widthdraw}
+                onChange={(e) => setWidthdraw(e.target.value)}
+                />
+                <button onClick={Widthdraw}>widthdraw</button>
+            </div>
+        </div>
+        {
+            transactions.length === 1 && <h1>you mad no transactions today</h1>
+        }
+        {
+            transactions.map((trans, i) => {
+                return(
+                    <h1 key={i}>{trans}</h1>
+            )
+            })
+        }
+        </div>
+     );
+}
+ 
+export default UserDash;
