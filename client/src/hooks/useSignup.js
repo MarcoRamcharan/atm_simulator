@@ -13,7 +13,7 @@ export const useSignup = () =>{
         const balance = 100
         setIsLoading(true)
         setError(null)
-        const response = await fetch('http://localhost:5000/api/auth/create', {
+        const response = await fetch('/api/auth/create', {
             method : 'POST',
             headers: {
                 'Content-Type' : 'application/json'
